@@ -90,12 +90,7 @@ const Loans = () => {
       return null;
     }
   };
-  const emailQuery = getUserInfo()?.email.replace('@', '%');
 
-
-    : undefined;
-
-  console.log({emailquery});
   // Fetch KPIs and loan applications
   const fetchData = async (pageNum: number = 0) => {
     const userInfo = getUserInfo();
