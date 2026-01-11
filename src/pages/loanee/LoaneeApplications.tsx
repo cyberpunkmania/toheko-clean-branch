@@ -3,24 +3,16 @@ import LoaneeDashboardLayout from './layout/LoaneeDashboardLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
+import { DataTable, Column } from '@/components/ui/data-table';
 import { 
   FileText, 
   Loader2,
-  ChevronLeft,
-  ChevronRight,
   Clock,
   CheckCircle,
   XCircle,
   AlertCircle,
-  CreditCard
+  CreditCard,
+  RefreshCw
 } from 'lucide-react';
 import { jwtDecode } from 'jwt-decode';
 import apiClient from '@/services/api';
@@ -77,6 +69,7 @@ const LoaneeApplications = () => {
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [totalElements, setTotalElements] = useState(0);
+  const [searchTerm, setSearchTerm] = useState('');
   const pageSize = 10;
 
   // Get user info from JWT token
@@ -96,7 +89,7 @@ const LoaneeApplications = () => {
   };
 
   // Fetch KPIs and loan applications
-  const fetchData = async (pageNum: number = 0) => {
+  const fetchData = async (pageNum: number = 0, search: string = '') => {
     const userInfo = getUserInfo();
     if (!userInfo) {
       setLoading(false);
@@ -106,16 +99,29 @@ const LoaneeApplications = () => {
     try {
       setLoading(true);
       
-      // Fetch KPIs - use email for loanee
-      const kpisResponse = await apiClient.get<LoanApplicationStatusSummary>(
-        `/loan-applications/kpis?email=${encodeURIComponent(userInfo.email)}`
-      );
-      setKpis(kpisResponse.data);
-
       // Fetch applications using get-all with email filter (q parameter)
       const applicationsResponse = await apiClient.get<PageableResponse<LoanApplication>>(
-        `/loan-applications/get-all?page=${pageNum}&size=${pageSize}&sort=createDate,DESC&q=${encodeURIComponent(userInfo.email)}`
+        `/api/v1/loan-applications/get-all?page=${pageNum}&size=${pageSize}&sort=createDate,DESC&q=${userInfo.email.toUpperCase().replace('@', '%')}`
       );
+      
+      // Try to fetch KPIs, but don't fail if it errors
+      try {
+        const kpisResponse = await apiClient.get<LoanApplicationStatusSummary>(
+          `/api/v1/loan-applications/kpis?email=${userInfo.email.toUpperCase().replace('@', '%')}`
+        );
+        setKpis(kpisResponse.data);
+      } catch (kpiError) {
+        console.log('KPIs endpoint not available, calculating from applications');
+        // Calculate KPIs from the applications data
+        const content = applicationsResponse.data.content;
+        setKpis({
+          pending: content.filter(a => a.status?.toUpperCase() === 'PENDING').length,
+          underReview: content.filter(a => a.status?.toUpperCase() === 'UNDER_REVIEW').length,
+          approved: content.filter(a => a.status?.toUpperCase() === 'APPROVED').length,
+          rejected: content.filter(a => a.status?.toUpperCase() === 'REJECTED').length,
+          disbursed: content.filter(a => a.status?.toUpperCase() === 'DISBURSED').length,
+        });
+      }
       
       setApplications(applicationsResponse.data.content);
       setTotalPages(applicationsResponse.data.totalPages);
@@ -159,6 +165,51 @@ const LoaneeApplications = () => {
     }
   };
 
+  // Define columns for DataTable
+  const columns: Column<LoanApplication>[] = [
+    {
+      header: 'Application ID',
+      accessorKey: 'loanApplicationCode',
+      sortable: true,
+      cell: (row) => (
+        <span className="font-medium">{row.loanApplicationCode}</span>
+      ),
+    },
+    {
+      header: 'Product',
+      accessorKey: 'loanProductCode',
+      sortable: true,
+    },
+    {
+      header: 'Amount',
+      accessorKey: 'amount',
+      sortable: true,
+      cell: (row) => (
+        <span>KES {row.amount?.toLocaleString()}</span>
+      ),
+    },
+    {
+      header: 'Term',
+      accessorKey: 'termDays',
+      sortable: true,
+      cell: (row) => (
+        <span>{row.termDays} days</span>
+      ),
+    },
+    {
+      header: 'Status',
+      accessorKey: 'status',
+      sortable: true,
+      cell: (row) => getStatusBadge(row.status),
+    },
+    {
+      header: 'Date',
+      accessorKey: 'createDate',
+      sortable: true,
+      cell: (row) => formatDate(row.createDate),
+    },
+  ];
+
   if (loading && applications.length === 0) {
     return (
       <LoaneeDashboardLayout>
@@ -181,12 +232,23 @@ const LoaneeApplications = () => {
               View and track all your loan applications
             </p>
           </div>
-          <Link to="/loanee/loan-application">
-            <Button size="sm">
-              <CreditCard className="mr-2 h-4 w-4" />
-              New Application
+          <div className="flex gap-2">
+            <Button 
+              size="sm" 
+              variant="outline" 
+              onClick={() => fetchData(page)}
+              disabled={loading}
+            >
+              <RefreshCw className={`mr-2 h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+              Refresh
             </Button>
-          </Link>
+            <Link to="/loanee/loan-application">
+              <Button size="sm">
+                <CreditCard className="mr-2 h-4 w-4" />
+                New Application
+              </Button>
+            </Link>
+          </div>
         </div>
 
         {/* KPI Cards */}
@@ -262,7 +324,7 @@ const LoaneeApplications = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            {applications.length === 0 ? (
+            {applications.length === 0 && !loading ? (
               <div className="text-center py-10">
                 <FileText className="mx-auto h-12 w-12 text-muted-foreground" />
                 <h3 className="mt-4 text-lg font-semibold">No applications yet</h3>
@@ -277,75 +339,16 @@ const LoaneeApplications = () => {
                 </Link>
               </div>
             ) : (
-              <>
-                <div className="rounded-md border overflow-x-auto">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead className="text-xs">Application ID</TableHead>
-                        <TableHead className="text-xs">Product</TableHead>
-                        <TableHead className="text-xs">Amount</TableHead>
-                        <TableHead className="text-xs">Term</TableHead>
-                        <TableHead className="text-xs">Status</TableHead>
-                        <TableHead className="text-xs">Date</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {applications.map((application) => (
-                        <TableRow key={application.loanApplicationId}>
-                          <TableCell className="font-medium text-xs">
-                            {application.loanApplicationCode}
-                          </TableCell>
-                          <TableCell className="text-xs">
-                            {application.loanProductCode}
-                          </TableCell>
-                          <TableCell className="text-xs">
-                            KES {application.amount?.toLocaleString()}
-                          </TableCell>
-                          <TableCell className="text-xs">
-                            {application.termDays} days
-                          </TableCell>
-                          <TableCell>
-                            {getStatusBadge(application.status)}
-                          </TableCell>
-                          <TableCell className="text-xs">
-                            {formatDate(application.createDate)}
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </div>
-
-                {/* Pagination */}
-                {totalPages > 1 && (
-                  <div className="flex items-center justify-between mt-4">
-                    <p className="text-xs text-muted-foreground">
-                      Page {page + 1} of {totalPages}
-                    </p>
-                    <div className="flex gap-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => fetchData(page - 1)}
-                        disabled={page === 0 || loading}
-                      >
-                        <ChevronLeft className="h-4 w-4" />
-                        Previous
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => fetchData(page + 1)}
-                        disabled={page >= totalPages - 1 || loading}
-                      >
-                        Next
-                        <ChevronRight className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </div>
-                )}
-              </>
+              <DataTable
+                data={applications}
+                columns={columns}
+                keyField="loanApplicationId"
+                loading={loading}
+                searchable={true}
+                pagination={true}
+                pageSize={pageSize}
+                emptyMessage="No applications found"
+              />
             )}
           </CardContent>
         </Card>

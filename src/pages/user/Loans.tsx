@@ -90,7 +90,9 @@ const Loans = () => {
       return null;
     }
   };
+  const emailquery = getUserInfo()?.email.replace('@', '%');
 
+  console.log({emailquery});
   // Fetch KPIs and loan applications
   const fetchData = async (pageNum: number = 0) => {
     const userInfo = getUserInfo();
@@ -106,7 +108,7 @@ const Loans = () => {
       const [kpiResponse, applicationsResponse] = await Promise.allSettled([
         apiClient.get<LoanApplicationStatusSummary>(`/api/v1/loan-applications/status-summary/${userInfo.userId}`),
         apiClient.get<PageableResponse<LoanApplication>>(
-          `/api/v1/loan-applications/get-all?page=${pageNum}&size=${pageSize}&sort=createDate,DESC&q=${userInfo.email}`
+          `/api/v1/loan-applications/get-all?page=${pageNum}&size=${pageSize}&sort=createDate,DESC&q=${userInfo.email.replace('@', '%')}`
         )
       ]);
 
