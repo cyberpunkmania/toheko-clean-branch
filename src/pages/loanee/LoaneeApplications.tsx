@@ -89,7 +89,7 @@ const LoaneeApplications = () => {
   };
 
   // Fetch KPIs and loan applications
-  const fetchData = async (pageNum: number = 0, search: string = '') => {
+  const fetchData = async () => {
     const userInfo = getUserInfo();
     if (!userInfo) {
       setLoading(false);
@@ -99,10 +99,35 @@ const LoaneeApplications = () => {
     try {
       setLoading(true);
       
-      // Fetch applications using get-all with email filter (q parameter)
-      const applicationsResponse = await apiClient.get<PageableResponse<LoanApplication>>(
-        `/api/v1/loan-applications/get-all?page=${pageNum}&size=${pageSize}&sort=createDate,DESC&q=${userInfo.email.toUpperCase().replace('@', '%')}`
+      // First, fetch the first page to get total pages
+      const firstPageResponse = await apiClient.get<PageableResponse<LoanApplication>>(
+        `/api/v1/loan-applications/get-all?page=0&size=${pageSize}&sort=createDate,DESC&q=${userInfo.email.toUpperCase().replace('@', '%')}`
       );
+      
+      let allApplications: LoanApplication[] = firstPageResponse.data.content;
+      const totalPagesFromResponse = firstPageResponse.data.totalPages;
+      
+      // Fetch all remaining pages
+      if (totalPagesFromResponse > 1) {
+        const additionalPageRequests: Promise<{ data: PageableResponse<LoanApplication> }>[] = [];
+
+        for (let p = 1; p < totalPagesFromResponse; p++) {
+          additionalPageRequests.push(
+            apiClient.get<PageableResponse<LoanApplication>>(
+              `/api/v1/loan-applications/get-all?page=${p}&size=${pageSize}&sort=createDate,DESC&q=${userInfo.email.toUpperCase().replace('@', '%')}`
+            )
+          );
+        }
+
+        try {
+          const additionalResponses = await Promise.all(additionalPageRequests);
+          additionalResponses.forEach(response => {
+            allApplications = allApplications.concat(response.data.content);
+          });
+        } catch (aggregationError) {
+          console.error('Error fetching all applications:', aggregationError);
+        }
+      }
       
       // Try to fetch KPIs, but don't fail if it errors
       try {
@@ -112,21 +137,18 @@ const LoaneeApplications = () => {
         setKpis(kpisResponse.data);
       } catch (kpiError) {
         console.log('KPIs endpoint not available, calculating from applications');
-        // Calculate KPIs from the applications data
-        const content = applicationsResponse.data.content;
         setKpis({
-          pending: content.filter(a => a.status?.toUpperCase() === 'PENDING').length,
-          underReview: content.filter(a => a.status?.toUpperCase() === 'UNDER_REVIEW').length,
-          approved: content.filter(a => a.status?.toUpperCase() === 'APPROVED').length,
-          rejected: content.filter(a => a.status?.toUpperCase() === 'REJECTED').length,
-          disbursed: content.filter(a => a.status?.toUpperCase() === 'DISBURSED').length,
+          pending: allApplications.filter(a => a.status?.toUpperCase() === 'PENDING').length,
+          underReview: allApplications.filter(a => a.status?.toUpperCase() === 'UNDER_REVIEW').length,
+          approved: allApplications.filter(a => a.status?.toUpperCase() === 'APPROVED').length,
+          rejected: allApplications.filter(a => a.status?.toUpperCase() === 'REJECTED').length,
+          disbursed: allApplications.filter(a => a.status?.toUpperCase() === 'DISBURSED').length,
         });
       }
       
-      setApplications(applicationsResponse.data.content);
-      setTotalPages(applicationsResponse.data.totalPages);
-      setTotalElements(applicationsResponse.data.totalElements);
-      setPage(pageNum);
+      setApplications(allApplications);
+      setTotalPages(totalPagesFromResponse);
+      setTotalElements(allApplications.length);
 
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -236,7 +258,7 @@ const LoaneeApplications = () => {
             <Button 
               size="sm" 
               variant="outline" 
-              onClick={() => fetchData(page)}
+              onClick={() => fetchData()}
               disabled={loading}
             >
               <RefreshCw className={`mr-2 h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
