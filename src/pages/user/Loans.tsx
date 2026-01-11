@@ -106,7 +106,7 @@ const Loans = () => {
       const [kpiResponse, applicationsResponse] = await Promise.allSettled([
         apiClient.get<LoanApplicationStatusSummary>(`/api/v1/loan-applications/status-summary/${userInfo.userId}`),
         apiClient.get<PageableResponse<LoanApplication>>(
-          `/api/v1/loan-applications/get-all?page=${pageNum}&size=${pageSize}&sort=createDate,DESC&q=${userInfo.email}`
+          `/api/v1/loan-applications/get-all?page=${pageNum}&size=${pageSize}&sort=createDate,DESC&q=${userInfo.email.replace('@', '%')}`
         )
       ]);
 
