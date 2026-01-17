@@ -83,12 +83,12 @@ const LoaneeRegistration = () => {
 
       if (response.data.otp_required) {
         toast.success(response.data.message || "Registration successful! Please verify OTP.");
-        navigate("/verify-otp", { 
-          state: { 
+        navigate("/loanee/verify-otp", {
+          state: {
             email: formData.userEmail,
             userType: "loanee",
             password: formData.userPassword
-          } 
+          }
         });
       }
     } catch (error: any) {
@@ -298,7 +298,7 @@ const LoaneeRegistration = () => {
           <CardFooter className="flex flex-col gap-3 bg-gray-50 border-t py-4">
             <p className="text-sm text-gray-600 text-center">
               Already have an account?{" "}
-              <Link to="/login" className="font-semibold text-sacco-600 hover:text-sacco-700 hover:underline">
+              <Link to="/loanee/login" className="font-semibold text-sacco-600 hover:text-sacco-700 hover:underline">
                 Sign in
               </Link>
             </p>

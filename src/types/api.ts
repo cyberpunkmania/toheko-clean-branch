@@ -110,6 +110,9 @@ export interface LoanType {
   status: string;
 }
 
+// Applicant Type enum
+export type ApplicantType = 'MEMBER' | 'GROUP' | 'LOANEE';
+
 export interface LoanProduct  {
   id: number;
   name: string;
@@ -128,6 +131,7 @@ export interface LoanProduct  {
   isActive: boolean;
   maxGuarantors: number;
   maxCollateralItems: number;
+  applicantType?: ApplicantType;
 };
 
 export interface LoanPenaltySetting  {

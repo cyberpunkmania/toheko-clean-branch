@@ -9,9 +9,15 @@ import AdminLogin from "./pages/AdminLogin";
 import MemberLogin from "./pages/MemberLogin";
 import LoaneeLogin from "./pages/LoaneeLogin";
 import Register from "./pages/Register";
-import VerifyOTP from "./pages/VerifyOTP";
-import RequestOTP from "./pages/RequestOTP";
-import ForgotPassword from "./pages/ForgotPassword";
+import AdminRequestOTP from "./pages/AdminRequestOTP";
+import AdminVerifyOTP from "./pages/AdminVerifyOTP";
+import MemberRequestOTP from "./pages/MemberRequestOTP";
+import MemberVerifyOTP from "./pages/MemberVerifyOTP";
+import LoaneeRequestOTP from "./pages/LoaneeRequestOTP";
+import LoaneeVerifyOTP from "./pages/LoaneeVerifyOTP";
+import AdminForgotPassword from "./pages/AdminForgotPassword";
+import MemberForgotPassword from "./pages/MemberForgotPassword";
+import LoaneeForgotPassword from "./pages/LoaneeForgotPassword";
 import Dashboard from "./pages/admin/Dashboard";
 import Members from "./pages/admin/Members";
 import AdminLoans from "./pages/admin/Loans";
@@ -82,9 +88,19 @@ const App = () => (
           <Route path="/member/login" element={<MemberLogin />} />
           <Route path="/loanee/login" element={<LoaneeLogin />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/verify-otp" element={<VerifyOTP />} />
-          <Route path="/request-otp" element={<RequestOTP />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
+          {/* Admin OTP Routes */}
+          <Route path="/admin/request-otp" element={<AdminRequestOTP />} />
+          <Route path="/admin/verify-otp" element={<AdminVerifyOTP />} />
+          {/* Member OTP Routes */}
+          <Route path="/member/request-otp" element={<MemberRequestOTP />} />
+          <Route path="/member/verify-otp" element={<MemberVerifyOTP />} />
+          {/* Loanee OTP Routes */}
+          <Route path="/loanee/request-otp" element={<LoaneeRequestOTP />} />
+          <Route path="/loanee/verify-otp" element={<LoaneeVerifyOTP />} />
+          {/* Forgot Password Routes */}
+          <Route path="/admin/forgot-password" element={<AdminForgotPassword />} />
+          <Route path="/member/forgot-password" element={<MemberForgotPassword />} />
+          <Route path="/loanee/forgot-password" element={<LoaneeForgotPassword />} />
           <Route path="/user" element={<ProtectedRoute />}>
             <Route path="dashboard" element={<UserDashboard />} />
             <Route path="payments" element={<UserPayments />} />

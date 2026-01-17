@@ -66,6 +66,7 @@ export const formSchema = z.object({
   isActive: z.boolean(),
   maxGuarantors: z.coerce.number().min(0),
   maxCollateralItems: z.coerce.number().min(0),
+  applicantType: z.enum(["MEMBER", "GROUP", "LOANEE"]),
 });
 type FormValues = z.infer<typeof formSchema>;
 
@@ -104,6 +105,7 @@ const LoanProducts = () => {
       isActive: true,
       maxGuarantors: 0,
       maxCollateralItems: 0,
+      applicantType: "MEMBER",
     },
   });
 
@@ -143,6 +145,7 @@ const LoanProducts = () => {
       isActive: true,
       maxGuarantors: 0,
       maxCollateralItems: 0,
+      applicantType: "MEMBER",
     });
     setIsEditing(false);
     setShowForm(true);
@@ -167,6 +170,7 @@ const LoanProducts = () => {
       isActive: product.isActive,
       maxGuarantors: product.maxGuarantors,
       maxCollateralItems: product.maxCollateralItems,
+      applicantType: product.applicantType || "MEMBER",
     });
     setIsEditing(true);
     setShowForm(true);
@@ -220,6 +224,7 @@ const LoanProducts = () => {
         isActive: values.isActive,
         maxGuarantors: values.maxGuarantors,
         maxCollateralItems: values.maxCollateralItems,
+        applicantType: values.applicantType,
       };
 
       if (isEditing) {
@@ -384,6 +389,16 @@ const LoanProducts = () => {
       header: "Max Collateral Items",
       accessorKey: "maxCollateralItems",
       cell: (loanProduct) => <span>{loanProduct.maxCollateralItems}</span>,
+    },
+    {
+      header: "Applicant Type",
+      accessorKey: "applicantType",
+      sortable: true,
+      cell: (loanProduct) => (
+        <Badge variant="outline" className="font-medium">
+          {loanProduct.applicantType || "N/A"}
+        </Badge>
+      ),
     },
 
     {
@@ -590,6 +605,35 @@ const LoanProducts = () => {
                               <SelectItem value="COMPOUND">Compound</SelectItem>
                             </SelectContent>
                           </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="applicantType"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Applicant Type</FormLabel>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                          >
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select applicant type" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="MEMBER">MEMBER</SelectItem>
+                              <SelectItem value="GROUP">GROUP</SelectItem>
+                              <SelectItem value="LOANEE">LOANEE</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormDescription>
+                            Who can apply for this loan product
+                          </FormDescription>
                           <FormMessage />
                         </FormItem>
                       )}

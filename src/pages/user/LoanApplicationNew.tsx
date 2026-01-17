@@ -102,7 +102,8 @@ const LoanApplication = () => {
     const fetchLoanProducts = async () => {
       try {
         setLoading(true);
-        const productsData = await userLoanService.getLoanProducts();
+        // Fetch active loan products for MEMBER applicant type
+        const productsData = await userLoanService.getActiveLoanProductsByApplicantType('MEMBER');
         setLoanProducts(productsData.content.filter(product => product.isActive));
       } catch (error) {
         console.error('Error fetching loan products:', error);

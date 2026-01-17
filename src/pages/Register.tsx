@@ -115,10 +115,10 @@ const Register = () => {
       // Check if OTP verification is required
       if (response.otp_required) {
         toast.success(response.message || "Registration successful! Please verify OTP sent to your email.");
-        navigate("/verify-otp", { state: { email: formData.userEmail } });
+        navigate("/member/verify-otp", { state: { email: formData.userEmail } });
       } else {
         toast.success("Registration successful! Redirecting to dashboard...");
-        navigate("/login");
+        navigate("/member/login");
       }
     } catch (error) {
       console.error("Registration failed:", error);
@@ -313,7 +313,7 @@ const Register = () => {
           <CardFooter className="flex flex-col gap-3 bg-gray-50 border-t py-4">
             <p className="text-sm text-gray-600 text-center">
               Already have an account?{" "}
-              <Link to="/login" className="font-semibold text-sacco-600 hover:text-sacco-700 hover:underline">
+              <Link to="/member/login" className="font-semibold text-sacco-600 hover:text-sacco-700 hover:underline">
                 Sign in
               </Link>
             </p>
