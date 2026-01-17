@@ -1,5 +1,8 @@
 import apiClient from '../api';
 
+// Applicant Type enum
+export type ApplicantType = 'MEMBER' | 'GROUP' | 'LOANEE';
+
 // Loan Product Interface
 export interface LoanProduct {
   createDate: string;
@@ -31,6 +34,7 @@ export interface LoanProduct {
   maxNextOfKin: number | null;
   status: string | null;
   statusReason: string | null;
+  applicantType?: ApplicantType;
 }
 
 // Loan Application Request
@@ -171,13 +175,28 @@ export interface LoanProductsResponse {
 
 // User loan service
 export const userLoanService = {
-  // Get all loan products
+  // Get all loan products (legacy method)
   getLoanProducts: async (page = 0, size = 20): Promise<LoanProductsResponse> => {
     try {
       const response = await apiClient.get(`/api/v1/loan-products/getAll?page=${page}&size=${size}`);
       return response.data.data;
     } catch (error) {
       console.error('Error fetching loan products:', error);
+      throw error;
+    }
+  },
+
+  // Get active loan products filtered by applicant type (MEMBER, LOANEE, GROUP)
+  getActiveLoanProductsByApplicantType: async (applicantType: ApplicantType, page = 0, size = 20): Promise<LoanProductsResponse> => {
+    try {
+      const response = await apiClient.get(`/api/v1/loan-products/active?page=${page}&size=${size}`, {
+        headers: {
+          'Applicant-Type': applicantType
+        }
+      });
+      return response.data.data;
+    } catch (error) {
+      console.error('Error fetching loan products by applicant type:', error);
       throw error;
     }
   },

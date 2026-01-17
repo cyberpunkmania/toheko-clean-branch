@@ -119,7 +119,7 @@ const LoaneeLogin = () => {
       // Check for OTP not verified error
       if (errorMessage?.includes("OTP not verified") || errorMessage?.includes("Please request OTP")) {
         toast.error("Please verify your email with OTP first.");
-        navigate("/request-otp", { state: { email: formData.username, fromLogin: true } });
+        navigate("/loanee/request-otp", { state: { email: formData.username, fromLogin: true } });
         return;
       }
       
@@ -210,7 +210,7 @@ const LoaneeLogin = () => {
               <div className="flex items-center justify-between">
                 <div className="text-sm">
                   <Link
-                    to="/forgot-password"
+                    to="/loanee/forgot-password"
                     className="font-medium text-purple-600 hover:text-purple-500"
                   >
                     Forgot password?
@@ -235,24 +235,6 @@ const LoaneeLogin = () => {
                 className="font-medium text-purple-600 hover:text-purple-500"
               >
                 Register here
-              </Link>
-            </div>
-            <div className="relative w-full">
-              <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t" />
-              </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-white px-2 text-muted-foreground">
-                  Other Login Options
-                </span>
-              </div>
-            </div>
-            <div className="flex flex-col gap-2 text-sm text-center">
-              <Link to="/admin/login" className="text-blue-600 hover:underline">
-                Login as Admin
-              </Link>
-              <Link to="/member/login" className="text-green-600 hover:underline">
-                Login as Member
               </Link>
             </div>
           </CardFooter>
