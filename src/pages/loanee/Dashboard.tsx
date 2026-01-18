@@ -45,7 +45,7 @@ const LoaneeDashboard = () => {
     const token = localStorage.getItem("token");
     if (!token) {
       toast.error("Please login to continue");
-      navigate("/login");
+      navigate("/loanee/login");
       return;
     }
 
@@ -53,7 +53,7 @@ const LoaneeDashboard = () => {
       const decoded = jwtDecode<DecodedToken>(token);
       if (!decoded.role.includes("LOANEE")) {
         toast.error("Unauthorized access");
-        navigate("/login");
+        navigate("/loanee/login");
         return;
       }
       setUserInfo({ email: decoded.sub, role: decoded.role });
@@ -69,14 +69,14 @@ const LoaneeDashboard = () => {
     } catch (error) {
       toast.error("Invalid session");
       localStorage.removeItem("token");
-      navigate("/login");
+      navigate("/loanee/login");
     }
   }, [navigate]);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     toast.success("Logged out successfully");
-    navigate("/login");
+    navigate("/loanee/login");
   };
 
   if (!userInfo) {

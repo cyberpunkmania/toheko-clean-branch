@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { jwtDecode } from "jwt-decode";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Bell, Settings, User, LogOut, HelpCircle, Home } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { authService } from "@/services/authService";
 
 import {
   DropdownMenu,
@@ -24,6 +25,7 @@ interface TohekoJwtPayload {
 }
 
 const DashboardHeader: React.FC = () => {
+  const navigate = useNavigate();
   const token = localStorage.getItem("token");
   const decoded = token ? jwtDecode<TohekoJwtPayload>(token) : { sub: "Admin User", role: "Administrator" };
   const [notificationCount, setNotificationCount] = useState(3);
@@ -38,6 +40,11 @@ const DashboardHeader: React.FC = () => {
   };
 
   const userInitials = getInitials(decoded.sub || "Admin User");
+
+  const handleLogout = () => {
+    authService.logout();
+    navigate("/admin/login", { replace: true });
+  };
 
   return (
     <header className="w-full bg-white border-b border-gray-200 sticky top-0 z-10">
@@ -145,9 +152,9 @@ const DashboardHeader: React.FC = () => {
                 <Home className="mr-2 h-4 w-4" />
                 <Link to="/" className="w-full">Back to Website</Link>
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
                 <LogOut className="mr-2 h-4 w-4" />
-                <Link to="/" className="w-full">Log out</Link>
+                <span className="w-full">Log out</span>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
