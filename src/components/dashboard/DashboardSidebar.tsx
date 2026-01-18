@@ -167,7 +167,7 @@ export default function DashboardSidebar() {
 
   const handleLogout = () => {
     authService.logout();
-    navigate("/login", { replace: true });
+    navigate("/admin/login", { replace: true });
   };
 
   // Handle responsive behavior

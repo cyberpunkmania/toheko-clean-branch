@@ -82,7 +82,7 @@ const UserDashboardLayout: React.FC<UserDashboardLayoutProps> = ({ children }) =
   const handleLogout = () => {
     authService.logout();
     toast.success("You have been logged out successfully");
-    navigate("/login");
+    navigate("/member/login");
   };
 
   const toggleSidebar = () => {

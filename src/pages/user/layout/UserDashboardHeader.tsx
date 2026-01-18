@@ -49,7 +49,7 @@ const UserDashboardHeader: React.FC<UserDashboardHeaderProps> = ({ toggleSidebar
   const handleLogout = () => {
     authService.logout();
     toast.success("You have been logged out successfully");
-    navigate("/login");
+    navigate("/member/login");
   };
 
   return (
