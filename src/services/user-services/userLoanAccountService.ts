@@ -1,4 +1,5 @@
 import apiClient from '../api';
+import { ENDPOINTS } from '../../config/endpoints';
 
 // Types for loan account history
 export interface LoanAccount {
@@ -52,7 +53,7 @@ export const loanAccountService = {
   // Get loan account history for a member
   getLoanAccountHistory: async (memberId: number, page: number = 0, size: number = 20): Promise<LoanAccountHistoryResponse> => {
     try {
-      const response = await apiClient.get(`/api/v1/loan-accounts/member-loan-account-history`, {
+      const response = await apiClient.get(`${ENDPOINTS.LOAN_ACCOUNTS.BASE}/member-loan-account-history`, {
         params: { page, size },
         headers: {
           'X-Member-Id': memberId.toString()

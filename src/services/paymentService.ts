@@ -5,6 +5,7 @@ import {
   PaymentUpdateDTO,
   AcknowledgementResponse 
 } from '../types/api';
+import { ENDPOINTS } from '../config/endpoints';
 
 export interface PaymentFormSchemaType {
   remarks?: string;
@@ -28,7 +29,7 @@ export const paymentService = {
   getAllPayments: async (page = 0, size = 10): Promise<any> => {
     try {
       console.log('Fetching all payments');
-      const response = await apiClient.get(`/api/v1/payments?page=${page}&size=${size}`);
+      const response = await apiClient.get(`${ENDPOINTS.PAYMENTS.BASE}?page=${page}&size=${size}`);
       console.log('Payments response:', response.data);
       return response.data;
     } catch (error) {
@@ -40,7 +41,7 @@ export const paymentService = {
   getPaymentsByAccountId: async (accountId: number, page = 0, size = 10): Promise<any> => {
     try {
       console.log(`Fetching payments for account ID: ${accountId}`);
-      const response = await apiClient.get(`/api/v1/payments/account/${accountId}?page=${page}&size=${size}`);
+      const response = await apiClient.get(`${ENDPOINTS.PAYMENTS.BASE}/account/${accountId}?page=${page}&size=${size}`);
       console.log('Account payments response:', response.data);
       return response.data;
     } catch (error) {
@@ -51,7 +52,7 @@ export const paymentService = {
 
   getPaymentKpis: async (): Promise<any> => {
     try {
-      const response = await apiClient.get('/api/v1/payments/kpis');
+      const response = await apiClient.get(`${ENDPOINTS.PAYMENTS.BASE}/kpis`);
       return response.data;
     } catch (error) {
       console.error('Error fetching payment KPIs:', error);
@@ -62,7 +63,7 @@ export const paymentService = {
   getPaymentById: async (paymentId: number): Promise<Payment> => {
     try {
       console.log(`Fetching payment with ID: ${paymentId}`);
-      const response = await apiClient.get(`/api/v1/payments/${paymentId}`);
+      const response = await apiClient.get(`${ENDPOINTS.PAYMENTS.BASE}/${paymentId}`);
       return response.data;
     } catch (error) {
       console.error(`Error fetching payment ${paymentId}:`, error);
@@ -73,7 +74,7 @@ export const paymentService = {
   updatePayment: async (paymentId: number, payment: PaymentUpdateDTO): Promise<AcknowledgementResponse> => {
     try {
       console.log(`Updating payment ${paymentId} with data:`, payment);
-      const response = await apiClient.put(`/api/v1/payments/${paymentId}`, payment);
+      const response = await apiClient.put(`${ENDPOINTS.PAYMENTS.BASE}/${paymentId}`, payment);
       return response.data;
     } catch (error) {
       console.error(`Error updating payment ${paymentId}:`, error);
@@ -84,7 +85,7 @@ export const paymentService = {
   createPayment: async (payment: PaymentFormSchemaType): Promise<AcknowledgementResponse> => {
     try {
       console.log('Creating new payment with data:', payment);
-      const response = await apiClient.post(`/api/v1/payments`, payment);
+      const response = await apiClient.post(ENDPOINTS.PAYMENTS.BASE, payment);
       console.log('Create payment response:', response.data);
       return response.data;
     } catch (error) {
@@ -96,7 +97,7 @@ export const paymentService = {
   promptPayment: async (promptData: PaymentPromptSchemaType): Promise<AcknowledgementResponse> => {
     try {
       console.log('Sending payment prompt with data:', promptData);
-      const response = await apiClient.post(`/api/v1/payments/prompt`, promptData);
+      const response = await apiClient.post(`${ENDPOINTS.PAYMENTS.BASE}/prompt`, promptData);
       console.log('Payment prompt response:', response.data);
       return response.data;
     } catch (error) {

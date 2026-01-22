@@ -1,19 +1,20 @@
 import apiClient from './api';
 import { Group, GroupRequest, GroupSuspensionRequest, GroupOfficial, PaginatedResponse, GroupOfficialRequest } from '../types/api';
+import { ENDPOINTS } from '../config/endpoints';
 
 export const groupService = {
   getAllGroups: async (): Promise<PaginatedResponse<Group>> => {
-    const response = await apiClient.get('/api/v1/groups/all-groups');
+    const response = await apiClient.get(`${ENDPOINTS.GROUPS.BASE}/all-groups`);
     return response.data; // Returns the full paginated response
   },
 
   getGroupById: async (groupId: number): Promise<Group> => {
-    const response = await apiClient.get(`/api/v1/groups/${groupId}`);
+    const response = await apiClient.get(`${ENDPOINTS.GROUPS.BASE}/${groupId}`);
     return response.data;
   },
 
   createGroup: async (groupData: GroupRequest): Promise<Group> => {
-    const response = await apiClient.post('/api/v1/groups/register', groupData);
+    const response = await apiClient.post(`${ENDPOINTS.GROUPS.BASE}/register`, groupData);
     return response.data;
   },
 
@@ -35,10 +36,10 @@ export const groupService = {
       };
       
       console.log('📦 Update payload:', payload);
-      console.log(`🛠 Using documented API endpoint: /api/v1/groups/update-group/${groupId}`);
+      console.log(`🛠 Using documented API endpoint: ${ENDPOINTS.GROUPS.BASE}/update-group/${groupId}`);
       
       const response = await apiClient.put(
-        `/api/v1/groups/update-group/${groupId}`,
+        `${ENDPOINTS.GROUPS.BASE}/update-group/${groupId}`,
         payload
       );
       
@@ -59,7 +60,7 @@ export const groupService = {
   },
 
   deleteGroup: async (groupId: number): Promise<void> => {
-    await apiClient.delete(`/api/v1/groups/${groupId}`);
+    await apiClient.delete(`${ENDPOINTS.GROUPS.BASE}/${groupId}`);
   },
 
   suspendGroup: async (groupId: number, suspensionData: GroupSuspensionRequest): Promise<void> => {
@@ -77,7 +78,7 @@ export const groupService = {
       
       // Send the request with the reason as a request parameter
       const response = await apiClient.patch(
-        `/api/v1/groups/${groupId}/suspend`,
+        `${ENDPOINTS.GROUPS.BASE}/${groupId}/suspend`,
         null, // No request body
         { params } // The reason goes as a query parameter
       );
@@ -95,40 +96,40 @@ export const groupService = {
 
   // Unsuspend a group
   unsuspendGroup: async (groupId: number): Promise<void> => {
-    await apiClient.patch(`/api/v1/groups/${groupId}/unsuspend`);
+    await apiClient.patch(`${ENDPOINTS.GROUPS.BASE}/${groupId}/unsuspend`);
   },
 
   approveGroup: async (groupId: number): Promise<void> => {
-    await apiClient.patch(`/api/v1/groups/${groupId}/approve`);
+    await apiClient.patch(`${ENDPOINTS.GROUPS.BASE}/${groupId}/approve`);
   },
 
   // Group officials related services
   getGroupOfficials: async (groupId: number): Promise<PaginatedResponse<GroupOfficial>> => {
-    const response = await apiClient.get(`/api/v1/group-officials/group/${groupId}`);
+    const response = await apiClient.get(`${ENDPOINTS.GROUP_OFFICIALS.BASE}/group/${groupId}`);
     return response.data; // Returns the full paginated response
   },
 
   getAllGroupOfficials: async (): Promise<PaginatedResponse<GroupOfficial>> => {
-    const response = await apiClient.get('/api/v1/group-officials/getAll-groupsOfficials');
+    const response = await apiClient.get(`${ENDPOINTS.GROUP_OFFICIALS.BASE}/getAll-groupsOfficials`);
     return response.data; // Returns the full paginated response
   },
   
   getGroupOfficialById: async (officialId: number): Promise<GroupOfficial> => {
-    const response = await apiClient.get(`/api/v1/group-officials/${officialId}`);
+    const response = await apiClient.get(`${ENDPOINTS.GROUP_OFFICIALS.BASE}/${officialId}`);
     return response.data;
   },
   
   createGroupOfficial: async (officialData: GroupOfficialRequest): Promise<GroupOfficial> => {
-    const response = await apiClient.post('/api/v1/group-officials/create', officialData);
+    const response = await apiClient.post(`${ENDPOINTS.GROUP_OFFICIALS.BASE}/create`, officialData);
     return response.data;
   },
   
   updateGroupOfficial: async (officialId: number, officialData: GroupOfficialRequest): Promise<GroupOfficial> => {
-    const response = await apiClient.put(`/api/v1/group-officials/update/${officialId}`, officialData);
+    const response = await apiClient.put(`${ENDPOINTS.GROUP_OFFICIALS.BASE}/update/${officialId}`, officialData);
     return response.data;
   },
   
   deleteGroupOfficial: async (officialId: number): Promise<void> => {
-    await apiClient.delete(`/api/v1/group-officials/${officialId}`);
+    await apiClient.delete(`${ENDPOINTS.GROUP_OFFICIALS.BASE}/${officialId}`);
   }
 };

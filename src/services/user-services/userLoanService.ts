@@ -1,4 +1,5 @@
 import apiClient from '../api';
+import { ENDPOINTS } from '../../config/endpoints';
 
 // Applicant Type enum
 export type ApplicantType = 'MEMBER' | 'GROUP' | 'LOANEE';
@@ -178,7 +179,7 @@ export const userLoanService = {
   // Get all loan products (legacy method)
   getLoanProducts: async (page = 0, size = 20): Promise<LoanProductsResponse> => {
     try {
-      const response = await apiClient.get(`/api/v1/loan-products/getAll?page=${page}&size=${size}`);
+      const response = await apiClient.get(`${ENDPOINTS.LOAN_PRODUCTS.BASE}/getAll?page=${page}&size=${size}`);
       return response.data.data;
     } catch (error) {
       console.error('Error fetching loan products:', error);
@@ -189,7 +190,7 @@ export const userLoanService = {
   // Get active loan products filtered by applicant type (MEMBER, LOANEE, GROUP)
   getActiveLoanProductsByApplicantType: async (applicantType: ApplicantType, page = 0, size = 20): Promise<LoanProductsResponse> => {
     try {
-      const response = await apiClient.get(`/api/v1/loan-products/active?page=${page}&size=${size}`, {
+      const response = await apiClient.get(`${ENDPOINTS.LOAN_PRODUCTS.BASE}/active?page=${page}&size=${size}`, {
         headers: {
           'Applicant-Type': applicantType
         }
@@ -204,7 +205,7 @@ export const userLoanService = {
   // Create loan application
   createLoanApplication: async (applicationData: LoanApplicationRequest): Promise<LoanApplicationResponse> => {
     try {
-      const response = await apiClient.post('/api/v1/loan-applications/create', applicationData);
+      const response = await apiClient.post(`${ENDPOINTS.LOAN_APPLICATIONS.BASE}/create`, applicationData);
       return response.data;
     } catch (error) {
       console.error('Error creating loan application:', error);
@@ -215,7 +216,7 @@ export const userLoanService = {
   // Add guarantor
   addGuarantor: async (guarantorData: GuarantorRequest): Promise<ApiResponse<GuarantorResponse>> => {
     try {
-      const response = await apiClient.post('/api/v1/loan-guarantors/create', guarantorData);
+      const response = await apiClient.post(`${ENDPOINTS.LOAN_GUARANTORS.BASE}/create`, guarantorData);
       return response.data;
     } catch (error) {
       console.error('Error adding guarantor:', error);
@@ -226,7 +227,7 @@ export const userLoanService = {
   // Add collateral
   addCollateral: async (collateralData: CollateralRequest): Promise<ApiResponse<CollateralResponse>> => {
     try {
-      const response = await apiClient.post('/api/v1/loan-collaterals', collateralData);
+      const response = await apiClient.post(ENDPOINTS.LOAN_COLLATERALS.BASE, collateralData);
       return response.data;
     } catch (error) {
       console.error('Error adding collateral:', error);
@@ -237,7 +238,7 @@ export const userLoanService = {
   // Add next of kin
   addNextOfKin: async (nextOfKinData: NextOfKinRequest): Promise<ApiResponse<NextOfKinResponse>> => {
     try {
-      const response = await apiClient.post('/api/v1/loan-next-of-kin', nextOfKinData);
+      const response = await apiClient.post(ENDPOINTS.LOAN_NEXT_OF_KIN.BASE, nextOfKinData);
       return response.data;
     } catch (error) {
       console.error('Error adding next of kin:', error);
@@ -248,7 +249,7 @@ export const userLoanService = {
   // Get loan application status summary
   getLoanApplicationStatusSummary: async (memberId: number): Promise<LoanApplicationStatusSummary> => {
     try {
-      const response = await apiClient.get(`/api/v1/loan-applications/status-summary/${memberId}`);
+      const response = await apiClient.get(`${ENDPOINTS.LOAN_APPLICATIONS.BASE}/status-summary/${memberId}`);
       return response.data;
     } catch (error) {
       console.error('Error fetching loan application status summary:', error);

@@ -1,4 +1,5 @@
 import apiClient from '../api';
+import { ENDPOINTS } from '../../config/endpoints';
 
 // Member details interface based on the API response
 export interface MemberDetails {
@@ -32,7 +33,7 @@ export const userMemberService = {
   // Get member details by member ID
   getMemberDetails: async (memberId: number): Promise<MemberDetails> => {
     try {
-      const response = await apiClient.get(`/api/v1/members/findByMemberId?memberId=${memberId}`);
+      const response = await apiClient.get(`${ENDPOINTS.MEMBERS.BASE}/findByMemberId?memberId=${memberId}`);
       return response.data;
     } catch (error) {
       console.error('Error fetching member details:', error);

@@ -1,5 +1,6 @@
 import apiClient from '../api';
 import { AcknowledgementResponse } from '../../types/api';
+import { ENDPOINTS } from '../../config/endpoints';
 
 // Types for the user payment flow
 export interface Account {
@@ -151,7 +152,7 @@ export const userPaymentService = {
   // Get accounts for the logged-in member
   getMemberAccounts: async (userId: number): Promise<Account[]> => {
     try {
-      const response = await apiClient.get(`/api/v1/accounts/member/${userId}`);
+      const response = await apiClient.get(`${ENDPOINTS.ACCOUNTS.BASE}/member/${userId}`);
       return response.data.content || response.data;
     } catch (error) {
       console.error('Error fetching member accounts:', error);
@@ -162,7 +163,7 @@ export const userPaymentService = {
   // Get all payment types
   getPaymentTypes: async (): Promise<PaymentType[]> => {
     try {
-      const response = await apiClient.get('/api/v1/paymentTypes/findAll');
+      const response = await apiClient.get(`${ENDPOINTS.PAYMENT_TYPES.BASE}/findAll`);
       return response.data.content || response.data;
     } catch (error) {
       console.error('Error fetching payment types:', error);
@@ -173,7 +174,7 @@ export const userPaymentService = {
   // Get all payment modes
   getPaymentModes: async (): Promise<PaymentMode[]> => {
     try {
-      const response = await apiClient.get('/api/v1/mode-of-payments/all');
+      const response = await apiClient.get(`${ENDPOINTS.MODE_OF_PAYMENTS.BASE}/all`);
       return response.data.content || response.data;
     } catch (error) {
       console.error('Error fetching payment modes:', error);
@@ -184,7 +185,7 @@ export const userPaymentService = {
   // Create a new payment
   createPayment: async (paymentData: PaymentRequest): Promise<PaymentResponse> => {
     try {
-      const response = await apiClient.post('/api/v1/payments', paymentData);
+      const response = await apiClient.post(ENDPOINTS.PAYMENTS.BASE, paymentData);
       return response.data;
     } catch (error) {
       console.error('Error creating payment:', error);
@@ -195,7 +196,7 @@ export const userPaymentService = {
   // Initiate STK push for M-PESA payment
   initiateSTKPush: async (stkData: STKPushRequest): Promise<STKPushResponse> => {
     try {
-      const response = await apiClient.post('/api/v1/result/request/lipampesa', stkData);
+      const response = await apiClient.post(`${ENDPOINTS.RESULT.BASE}/request/lipampesa`, stkData);
       return response.data;
     } catch (error) {
       console.error('Error initiating STK push:', error);
@@ -206,7 +207,7 @@ export const userPaymentService = {
   // Check payment status using externalRef
   checkPaymentStatus: async (statusData: PaymentStatusRequest): Promise<PaymentStatusResponse> => {
     try {
-      const response = await apiClient.post('/api/v1/payments', statusData);
+      const response = await apiClient.post(ENDPOINTS.PAYMENTS.BASE, statusData);
       return response.data;
     } catch (error) {
       console.error('Error checking payment status:', error);
@@ -217,7 +218,7 @@ export const userPaymentService = {
   // Get payment history for a user
   getPaymentHistory: async (memberId: number, page: number = 0, size: number = 20): Promise<PaymentHistoryResponse> => {
     try {
-      const response = await apiClient.get(`/api/v1/payments/users-payments-history`, {
+      const response = await apiClient.get(`${ENDPOINTS.PAYMENTS.BASE}/users-payments-history`, {
         params: { page, size },
         headers: {
           'X-Member-Id': memberId.toString()
@@ -233,7 +234,7 @@ export const userPaymentService = {
   // Export payment history as CSV
   exportPaymentHistoryCSV: async (memberId: number): Promise<Blob> => {
     try {
-      const response = await apiClient.get(`/api/v1/payments/users-payments-export.csv`, {
+      const response = await apiClient.get(`${ENDPOINTS.PAYMENTS.BASE}/users-payments-export.csv`, {
         headers: {
           'X-Member-Id': memberId.toString(),
           'accept': 'text/csv'
@@ -250,7 +251,7 @@ export const userPaymentService = {
   // Get payment KPIs for a member
   getPaymentKPIs: async (memberId: number): Promise<PaymentKPIs> => {
     try {
-      const response = await apiClient.get(`/api/v1/payments/kpis`, {
+      const response = await apiClient.get(`${ENDPOINTS.PAYMENTS.BASE}/kpis`, {
         params: { memberId }
       });
       return response.data;

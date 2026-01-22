@@ -7,9 +7,10 @@ import {
   RepaymentScheduleRequest,
 } from "@/types/api";
 import { toast } from "@/components/ui/sonner";
+import { ENDPOINTS } from '../config/endpoints';
 
 // Base URL for repayment schedules API
-const BASE_URL = "/api/v1/repayment-schedules";
+const BASE_URL = ENDPOINTS.REPAYMENT_SCHEDULES.BASE;
 
 // Helper function to handle API errors
 const handleApiError = (error: any, customMessage?: string) => {

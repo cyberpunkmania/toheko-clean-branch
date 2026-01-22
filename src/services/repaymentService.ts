@@ -10,12 +10,13 @@ import {
   AcknowledgementResponse,
   AcknowledgementResponseObject
 } from '../types/api';
+import { ENDPOINTS } from '../config/endpoints';
 
 export const repaymentService = {
   // Get all repayments with pagination
   getAllRepayments: async (page = 0, size = 20, sort = 'id,desc'): Promise<Repayment[]> => {
     try {
-      const response = await apiClient.get(`/api/v1/repayments?page=${page}&size=${size}&sort=${sort}`);
+      const response = await apiClient.get(`${ENDPOINTS.REPAYMENTS.BASE}?page=${page}&size=${size}&sort=${sort}`);
       
       // Handle different response structures
       if (response.data && response.data.data && response.data.data.content) {
@@ -35,7 +36,7 @@ export const repaymentService = {
   // Get repayment by ID
   getRepaymentById: async (id: number): Promise<Repayment | null> => {
     try {
-      const response = await apiClient.get(`/api/v1/repayments/${id}`);
+      const response = await apiClient.get(`${ENDPOINTS.REPAYMENTS.BASE}/${id}`);
       return response.data?.data || response.data;
     } catch (error) {
       console.error(`Error fetching repayment with ID ${id}:`, error);
@@ -46,7 +47,7 @@ export const repaymentService = {
   // Get repayments by loan ID
   getRepaymentsByLoanId: async (loanId: number): Promise<Repayment[]> => {
     try {
-      const response = await apiClient.get(`/api/v1/repayments/by-loan/${loanId}`);
+      const response = await apiClient.get(`${ENDPOINTS.REPAYMENTS.BASE}/by-loan/${loanId}`);
       
       if (response.data && response.data.data) {
         return response.data.data;
@@ -63,7 +64,7 @@ export const repaymentService = {
   // Get repayments by status
   getRepaymentsByStatus: async (status: string): Promise<Repayment[]> => {
     try {
-      const response = await apiClient.get(`/api/v1/repayments/by-status/${status}`);
+      const response = await apiClient.get(`${ENDPOINTS.REPAYMENTS.BASE}/by-status/${status}`);
       
       if (response.data && response.data.data) {
         return response.data.data;
@@ -80,7 +81,7 @@ export const repaymentService = {
   // Get overdue repayments
   getOverdueRepayments: async (): Promise<Repayment[]> => {
     try {
-      const response = await apiClient.get('/api/v1/repayments/overdue');
+      const response = await apiClient.get(`${ENDPOINTS.REPAYMENTS.BASE}/overdue`);
       
       if (response.data && response.data.data) {
         return response.data.data;
@@ -97,7 +98,7 @@ export const repaymentService = {
   // Get repayments by due date
   getRepaymentsByDueDate: async (dueDate: string): Promise<Repayment[]> => {
     try {
-      const response = await apiClient.get(`/api/v1/repayments/by-due-date?dueDate=${dueDate}`);
+      const response = await apiClient.get(`${ENDPOINTS.REPAYMENTS.BASE}/by-due-date?dueDate=${dueDate}`);
       
       if (response.data && response.data.data) {
         return response.data.data;
@@ -114,7 +115,7 @@ export const repaymentService = {
   // Get repayments by due date range
   getRepaymentsByDueDateRange: async (startDate: string, endDate: string): Promise<Repayment[]> => {
     try {
-      const response = await apiClient.get(`/api/v1/repayments/by-due-date-range?startDate=${startDate}&endDate=${endDate}`);
+      const response = await apiClient.get(`${ENDPOINTS.REPAYMENTS.BASE}/by-due-date-range?startDate=${startDate}&endDate=${endDate}`);
       
       if (response.data && response.data.data) {
         return response.data.data;
@@ -131,7 +132,7 @@ export const repaymentService = {
   // Get repayments by code
   getRepaymentsByCode: async (code: string): Promise<Repayment[]> => {
     try {
-      const response = await apiClient.get(`/api/v1/repayments/by-code/${code}`);
+      const response = await apiClient.get(`${ENDPOINTS.REPAYMENTS.BASE}/by-code/${code}`);
       
       if (response.data && response.data.data) {
         return response.data.data;
@@ -148,7 +149,7 @@ export const repaymentService = {
   // Create a new repayment
   createRepayment: async (repayment: RepaymentRequest): Promise<Repayment | null> => {
     try {
-      const response = await apiClient.post('/api/v1/repayments', repayment);
+      const response = await apiClient.post(ENDPOINTS.REPAYMENTS.BASE, repayment);
       return response.data?.data || response.data;
     } catch (error) {
       console.error('Error creating repayment:', error);
@@ -159,7 +160,7 @@ export const repaymentService = {
   // Update a repayment
   updateRepayment: async (id: number, repayment: RepaymentRequest): Promise<Repayment | null> => {
     try {
-      const response = await apiClient.put(`/api/v1/repayments/${id}`, repayment);
+      const response = await apiClient.put(`${ENDPOINTS.REPAYMENTS.BASE}/${id}`, repayment);
       return response.data?.data || response.data;
     } catch (error) {
       console.error(`Error updating repayment with ID ${id}:`, error);
@@ -170,7 +171,7 @@ export const repaymentService = {
   // Delete a repayment
   deleteRepayment: async (id: number): Promise<AcknowledgementResponseObject> => {
     try {
-      const response = await apiClient.delete(`/api/v1/repayments/${id}`);
+      const response = await apiClient.delete(`${ENDPOINTS.REPAYMENTS.BASE}/${id}`);
       return response.data;
     } catch (error) {
       console.error(`Error deleting repayment with ID ${id}:`, error);
@@ -181,7 +182,7 @@ export const repaymentService = {
   // Record a payment for a repayment
   recordPayment: async (id: number, paymentData: RecordPaymentRequest): Promise<Repayment | null> => {
     try {
-      const response = await apiClient.put(`/api/v1/repayments/${id}/record-payment`, paymentData);
+      const response = await apiClient.put(`${ENDPOINTS.REPAYMENTS.BASE}/${id}/record-payment`, paymentData);
       return response.data?.data || response.data;
     } catch (error) {
       console.error(`Error recording payment for repayment with ID ${id}:`, error);
@@ -192,7 +193,7 @@ export const repaymentService = {
   // Waive a repayment
   waiveRepayment: async (id: number, waiveData: WaiveRequest): Promise<Repayment | null> => {
     try {
-      const response = await apiClient.put(`/api/v1/repayments/${id}/waive`, waiveData);
+      const response = await apiClient.put(`${ENDPOINTS.REPAYMENTS.BASE}/${id}/waive`, waiveData);
       return response.data?.data || response.data;
     } catch (error) {
       console.error(`Error waiving repayment with ID ${id}:`, error);
@@ -203,7 +204,7 @@ export const repaymentService = {
   // Cancel a repayment
   cancelRepayment: async (id: number, cancelData: CancelRequest): Promise<Repayment | null> => {
     try {
-      const response = await apiClient.put(`/api/v1/repayments/${id}/cancel`, cancelData);
+      const response = await apiClient.put(`${ENDPOINTS.REPAYMENTS.BASE}/${id}/cancel`, cancelData);
       return response.data?.data || response.data;
     } catch (error) {
       console.error(`Error cancelling repayment with ID ${id}:`, error);

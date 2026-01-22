@@ -4,6 +4,7 @@ import {
   PaymentTypeRequest,
   AcknowledgementResponse 
 } from '../types/api';
+import { ENDPOINTS } from '../config/endpoints';
 
 export type PaymentTypeFormValues = {
   name: string;
@@ -13,12 +14,12 @@ export type PaymentTypeFormValues = {
 
 export const paymentTypeService = {
   getAllPaymentTypes: async (): Promise<PaymentType[]> => {
-    const response = await apiClient.get('/api/v1/paymentTypes/findAll');
+    const response = await apiClient.get(`${ENDPOINTS.PAYMENT_TYPES.BASE}/findAll`);
     return response.data;
   },
 
   getPaymentTypeById: async (id: number): Promise<PaymentType> => {
-    const response = await apiClient.get(`/api/v1/paymentTypes/${id}`);
+    const response = await apiClient.get(`${ENDPOINTS.PAYMENT_TYPES.BASE}/${id}`);
     return response.data;
   },
 
@@ -33,7 +34,7 @@ export const paymentTypeService = {
     };
     
     
-    const response = await apiClient.put('/api/v1/paymentTypes/update', payload, {
+    const response = await apiClient.put(`${ENDPOINTS.PAYMENT_TYPES.BASE}/update`, payload, {
       headers: {
         'Content-Type': 'application/json'
       }
@@ -42,12 +43,12 @@ export const paymentTypeService = {
   },
 
   createPaymentType: async (paymentType: PaymentTypeFormValues): Promise<AcknowledgementResponse> => {
-    const response = await apiClient.post('/api/v1/paymentTypes/create', paymentType);
+    const response = await apiClient.post(`${ENDPOINTS.PAYMENT_TYPES.BASE}/create`, paymentType);
     return response.data;
   },
   
   deletePaymentType: async (id: number): Promise<AcknowledgementResponse> => {
-    const response = await apiClient.delete(`/api/v1/paymentTypes/delete?paymentTypeId=${id}`);
+    const response = await apiClient.delete(`${ENDPOINTS.PAYMENT_TYPES.BASE}/delete?paymentTypeId=${id}`);
     return response.data;
   }
 };
