@@ -1,9 +1,10 @@
 import apiClient from "./api";
+import { ENDPOINTS } from "@/config/endpoints";
 
 export const expenseCategoryService = {
   getCategories: async (page = 0, size = 10, sort = "createdAt,DESC") => {
     const resp = await apiClient.get(
-      `/api/v1/expense-categories?page=${page}&size=${size}&sort=${encodeURIComponent(
+      `${ENDPOINTS.EXPENSE_CATEGORIES.BASE}?page=${page}&size=${size}&sort=${encodeURIComponent(
         sort
       )}`
     );
@@ -11,7 +12,7 @@ export const expenseCategoryService = {
   },
 
   getCategoryById: async (id: number) => {
-    const resp = await apiClient.get(`/api/v1/expense-categories/${id}`);
+    const resp = await apiClient.get(`${ENDPOINTS.EXPENSE_CATEGORIES.BASE}/${id}`);
     return resp.data?.data ?? resp.data;
   },
 
@@ -22,7 +23,7 @@ export const expenseCategoryService = {
     const headers: any = {};
     if (userId) headers.userId = String(userId);
     const resp = await apiClient.post(
-      "/api/v1/expense-categories",
+      ENDPOINTS.EXPENSE_CATEGORIES.BASE,
       payload,
       { headers }
     );
@@ -31,14 +32,14 @@ export const expenseCategoryService = {
 
   updateCategory: async (id: number, payload: { name: string; description?: string }) => {
     const resp = await apiClient.put(
-      `/api/v1/expense-categories/${id}`,
+      `${ENDPOINTS.EXPENSE_CATEGORIES.BASE}/${id}`,
       payload
     );
     return resp.data?.data ?? resp.data;
   },
 
   deleteCategory: async (id: number) => {
-    const resp = await apiClient.delete(`/api/v1/expense-categories/${id}`);
+    const resp = await apiClient.delete(`${ENDPOINTS.EXPENSE_CATEGORIES.BASE}/${id}`);
     return resp.data;
   },
 };

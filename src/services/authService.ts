@@ -1,10 +1,11 @@
 
 import apiClient from './api';
 import { AuthenticationRequest, RegisterRequest, AuthenticationResponse } from '../types/api';
+import { ENDPOINTS } from '../config/endpoints';
 
 export const authService = {
   login: async (request: AuthenticationRequest): Promise<AuthenticationResponse> => {
-    const response = await apiClient.post('/api/v1/auth/authenticate', request);
+    const response = await apiClient.post(ENDPOINTS.AUTH.AUTHENTICATE, request);
     if (response.data.access_token) {
       localStorage.setItem('token', response.data.access_token);
     }
@@ -12,15 +13,14 @@ export const authService = {
   },
 
   register: async (request: RegisterRequest): Promise<AuthenticationResponse> => {
-    const response = await apiClient.post('/api/v1/auth/register', request);
+    const response = await apiClient.post(ENDPOINTS.AUTH.REGISTER, request);
     if (response.data.access_token) {
       localStorage.setItem('token', response.data.access_token);
     }
     return response.data;
   },
-
   refreshToken: async (): Promise<void> => {
-    const response = await apiClient.post('/api/v1/auth/refresh-token');
+    const response = await apiClient.post(ENDPOINTS.AUTH.REFRESH_TOKEN);
     if (response.data && response.data.access_token) {
       localStorage.setItem('token', response.data.access_token);
     }

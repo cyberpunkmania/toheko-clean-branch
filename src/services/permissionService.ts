@@ -5,24 +5,25 @@ import {
   PermissionDTO,
   AcknowledgementResponse 
 } from '../types/api';
+import { ENDPOINTS } from '../config/endpoints';
 
 export const permissionService = {
   getAllPermissions: async (): Promise<Permission[]> => {
-    const response = await apiClient.get('/api/v1/permissions');
+    const response = await apiClient.get(ENDPOINTS.PERMISSIONS.BASE);
     return response.data;
   },
 
   getPermissionById: async (id: number): Promise<Permission> => {
-    const response = await apiClient.get(`/api/v1/permissions/${id}`);
+    const response = await apiClient.get(`${ENDPOINTS.PERMISSIONS.BASE}/${id}`);
     return response.data;
   },
 
   updatePermission: async (id: number, permission: PermissionDTO): Promise<Permission> => {
-    const response = await apiClient.put(`/api/v1/permissions/${id}`, permission);
+    const response = await apiClient.put(`${ENDPOINTS.PERMISSIONS.BASE}/${id}`, permission);
     return response.data;
   },
 
   deletePermission: async (id: number): Promise<void> => {
-    await apiClient.delete(`/api/v1/permissions/${id}`);
+    await apiClient.delete(`${ENDPOINTS.PERMISSIONS.BASE}/${id}`);
   }
 };

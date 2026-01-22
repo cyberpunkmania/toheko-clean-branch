@@ -1,10 +1,11 @@
 // services/accountTypeService.ts
 import apiClient from './api';
 import { AccountType, AccountTypeDTO, AcknowledgementResponse } from '../types/api';
+import { ENDPOINTS } from '../config/endpoints';
 
 export const accountTypeService = {
   getAllAccountTypes: async (): Promise<AccountType[]> => {
-    const response = await apiClient.get('/api/v1/account-types');
+    const response = await apiClient.get(ENDPOINTS.ACCOUNT_TYPES.BASE);
     return response.data.map((item: any) => ({
       id: item.accountTypeId,
       name: item.name,
@@ -20,7 +21,7 @@ export const accountTypeService = {
   },
 
   getAccountTypeById: async (id: number): Promise<AccountType> => {
-    const response = await apiClient.get(`/api/v1/account-types/${id}`);
+    const response = await apiClient.get(`${ENDPOINTS.ACCOUNT_TYPES.BASE}/${id}`);
     const item = response.data;
     return {
       id: item.accountTypeId,
@@ -37,17 +38,17 @@ export const accountTypeService = {
   },
 
   createAccountType: async (accountType: AccountTypeDTO): Promise<AcknowledgementResponse> => {
-    const response = await apiClient.post('/api/v1/account-types', accountType);
+    const response = await apiClient.post(ENDPOINTS.ACCOUNT_TYPES.BASE, accountType);
     return response.data;
   },
 
   updateAccountType: async (id: number, accountType: AccountTypeDTO): Promise<AcknowledgementResponse> => {
-    const response = await apiClient.put(`/api/v1/account-types/${id}`, accountType);
+    const response = await apiClient.put(`${ENDPOINTS.ACCOUNT_TYPES.BASE}/${id}`, accountType);
     return response.data;
   },
 
   deleteAccountType: async (id: number): Promise<AcknowledgementResponse> => {
-    const response = await apiClient.delete(`/api/v1/account-types/${id}`);
+    const response = await apiClient.delete(`${ENDPOINTS.ACCOUNT_TYPES.BASE}/${id}`);
     return response.data;
   },
 };

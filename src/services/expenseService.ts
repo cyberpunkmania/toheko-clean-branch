@@ -1,14 +1,15 @@
 import apiClient from "./api";
 import { Expense } from "@/types/api";
+import { ENDPOINTS } from "@/config/endpoints";
 
 export const expenseService = {
   getExpenses: async (page = 0, size = 10, sort = "createdAt,DESC") => {
-    const resp = await apiClient.get(`/api/v1/expenses?page=${page}&size=${size}&sort=${encodeURIComponent(sort)}`);
+    const resp = await apiClient.get(`${ENDPOINTS.EXPENSES.BASE}?page=${page}&size=${size}&sort=${encodeURIComponent(sort)}`);
     return resp.data?.data ?? resp.data;
   },
 
   getExpenseById: async (id: number) => {
-    const resp = await apiClient.get(`/api/v1/expenses/${id}`);
+    const resp = await apiClient.get(`${ENDPOINTS.EXPENSES.BASE}/${id}`);
     return resp.data?.data ?? resp.data;
   },
 
@@ -16,17 +17,17 @@ export const expenseService = {
     const userId = localStorage.getItem("userId");
     const headers: any = {};
     if (userId) headers.userId = String(userId);
-    const resp = await apiClient.post("/api/v1/expenses", payload, { headers });
+    const resp = await apiClient.post(ENDPOINTS.EXPENSES.BASE, payload, { headers });
     return resp.data?.data ?? resp.data;
   },
 
   updateExpense: async (id: number, payload: { title: string; description?: string; amount: number; categoryId?: number }) => {
-    const resp = await apiClient.put(`/api/v1/expenses/${id}`, payload);
+    const resp = await apiClient.put(`${ENDPOINTS.EXPENSES.BASE}/${id}`, payload);
     return resp.data?.data ?? resp.data;
   },
 
   deleteExpense: async (id: number) => {
-    const resp = await apiClient.delete(`/api/v1/expenses/${id}`);
+    const resp = await apiClient.delete(`${ENDPOINTS.EXPENSES.BASE}/${id}`);
     return resp.data;
   },
   approveExpense: async (
@@ -35,7 +36,7 @@ export const expenseService = {
     approverId: number,
     rejectionReason?: string
   ) => {
-    return apiClient.post(`api/v1/expenses/${id}/approve`, {
+    return apiClient.post(`${ENDPOINTS.EXPENSES.BASE}/${id}/approve`, {
       expenseId: id,
       action,
       approverId,
@@ -48,7 +49,7 @@ export const expenseService = {
     });
   },
     getExpenseKpis: async () => {
-    const res = await apiClient.get("/api/v1/expense-kpi/range");
+    const res = await apiClient.get(`${ENDPOINTS.EXPENSE_KPI.BASE}/range`);
     return res.data;
   },
 };
