@@ -28,7 +28,7 @@ const GuarantorsTab = ({ control, currentTab, fields, append, remove,isLoading }
         </Card>
         );
     }
-console.log("GuarantorsTab rendered with fields:", fields);
+//console.log("GuarantorsTab rendered with fields:", fields);
   return (
     <Card>
       <CardHeader>

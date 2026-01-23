@@ -25,7 +25,7 @@ export const paymentTypeService = {
 
   updatePaymentType: async (paymentType: PaymentTypeRequest): Promise<AcknowledgementResponse> => {
     
-    console.log("Updating payment type with data:", paymentType);
+    //console.log("Updating payment type with data:", paymentType);
     
     
     const payload = {

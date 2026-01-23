@@ -83,7 +83,7 @@ const LoanProducts = () => {
     queryFn: loanService.getAllLoanTypes,
   });
 
-  console.log("loan product", loanTypes);
+  //console.log("loan product", loanTypes);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),

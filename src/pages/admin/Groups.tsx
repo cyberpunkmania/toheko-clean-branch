@@ -545,29 +545,29 @@ const Groups: React.FC = () => {
 
   // Add a direct event handler to debug form submission issues
   const handleUpdateClick = () => {
-    console.log('Update button was clicked directly');
-    console.log('Current form values:', groupForm.getValues());
-    console.log('Form state:', groupForm.formState);
-    console.log('Is form valid?', groupForm.formState.isValid);
-    console.log('Form errors:', groupForm.formState.errors);
+    //console.log('Update button was clicked directly');
+    //console.log('Current form values:', groupForm.getValues());
+    //console.log('Form state:', groupForm.formState);
+    //console.log('Is form valid?', groupForm.formState.isValid);
+    //console.log('Form errors:', groupForm.formState.errors);
   };
 
   const onSubmitEdit = async (values: GroupFormValues) => {
-    console.log('🔵 onSubmitEdit FUNCTION CALLED!');
-    console.log('📝 Form values received:', values);
+    //console.log('🔵 onSubmitEdit FUNCTION CALLED!');
+    //console.log('📝 Form values received:', values);
     
     if (!selectedGroup) {
       console.error('❌ No selected group found!');
       return;
     }
     
-    console.log('✅ Selected group exists:', selectedGroup.groupId);
+    //console.log('✅ Selected group exists:', selectedGroup.groupId);
     setIsEditLoading(true);
     
     try {
       // Log all relevant context
-      console.log('💼 Current form state:', groupForm.formState);
-      console.log('📋 Full form values:', groupForm.getValues());
+      //console.log('💼 Current form state:', groupForm.formState);
+      //console.log('📋 Full form values:', groupForm.getValues());
       
       // Ensure all required fields are present
       const groupData: GroupRequest = {
@@ -580,18 +580,18 @@ const Groups: React.FC = () => {
         physicalAddress: values.physicalAddress || ""
       };
       
-      console.log('⚙️ Preparing API call to update group:', selectedGroup.groupId);
-      console.log('📦 Update payload:', JSON.stringify(groupData));
+      //console.log('⚙️ Preparing API call to update group:', selectedGroup.groupId);
+      //console.log('📦 Update payload:', JSON.stringify(groupData));
       
       // Call the update service with a timeout to make sure we catch any issues
       const timeoutId = setTimeout(() => {
-        console.log('⚠️ Update operation taking longer than expected...');
+        //console.log('⚠️ Update operation taking longer than expected...');
       }, 3000);
       
       try {
         const updatedGroup = await groupService.updateGroup(selectedGroup.groupId, groupData);
         clearTimeout(timeoutId);
-        console.log('🎉 Update successful! Response:', updatedGroup);
+        //console.log('🎉 Update successful! Response:', updatedGroup);
         
         toast({
           title: "Success",
@@ -616,7 +616,7 @@ const Groups: React.FC = () => {
       });
     } finally {
       setIsEditLoading(false);
-      console.log('🏁 Update operation completed (success or failure)');
+      //console.log('🏁 Update operation completed (success or failure)');
     }
   };
 
@@ -661,7 +661,7 @@ const Groups: React.FC = () => {
     
     try {
       // Debug the values coming from the form
-      console.log('Suspension form values:', values);
+      //console.log('Suspension form values:', values);
       
       // Create a very simple payload with ONLY the reason field
       // According to the API docs, this is what the endpoint expects
@@ -670,7 +670,7 @@ const Groups: React.FC = () => {
         // Removing suspendedUntil since it's not in the API docs for this endpoint
       };
       
-      console.log(`Attempting to suspend group ${selectedGroup.groupId} with reason: ${values.reason}`);
+      //console.log(`Attempting to suspend group ${selectedGroup.groupId} with reason: ${values.reason}`);
       
       // Call the service function
       await groupService.suspendGroup(selectedGroup.groupId, suspensionData);
@@ -1070,9 +1070,9 @@ const Groups: React.FC = () => {
             <Form {...groupForm}>
               <form onSubmit={(e) => {
                 e.preventDefault();
-                console.log('🔔 Form submission event triggered');
+                //console.log('🔔 Form submission event triggered');
                 groupForm.handleSubmit(values => {
-                  console.log('📋 Form values being submitted:', values);
+                  //console.log('📋 Form values being submitted:', values);
                   onSubmitEdit(values);
                 })();
               }} className="space-y-4">
@@ -1177,7 +1177,7 @@ const Groups: React.FC = () => {
                     disabled={isEditLoading}
                     onClick={(e) => {
                       e.preventDefault(); // Prevent default form submission
-                      console.log('Update button clicked directly');
+                      //console.log('Update button clicked directly');
                       handleUpdateClick();
                       // Manually trigger the form submission handler
                       groupForm.handleSubmit(onSubmitEdit)();

@@ -82,7 +82,7 @@ const PaymentTypes = () => {
       });
       
       // Log the selected payment type for debugging
-      console.log("Selected payment type for editing:", selectedPaymentType);
+      //console.log("Selected payment type for editing:", selectedPaymentType);
     }
   }, [selectedPaymentType, showEditDialog, editForm]);
 

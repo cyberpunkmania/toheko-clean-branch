@@ -145,9 +145,38 @@ const Loans = () => {
     }
   };
 
-  // Get userId and role from localStorage
-  const userId = localStorage.getItem("userId");
-  const userRole = localStorage.getItem("role");
+  // Get userId and role from JWT token in localStorage
+  const getTokenPayload = () => {
+    const token = localStorage.getItem("token");
+    if (!token) return null;
+    try {
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const jsonPayload = decodeURIComponent(
+        atob(base64)
+          .split('')
+          .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+          .join('')
+      );
+      return JSON.parse(jsonPayload);
+    } catch (e) {
+      console.error("Error decoding token:", e);
+      return null;
+    }
+  };
+
+  const tokenPayload = getTokenPayload();
+  const userId = tokenPayload?.userId || localStorage.getItem("userId");
+  const userRole = tokenPayload?.role || localStorage.getItem("role");
+  
+  // Debug: Log the role to check what value is stored
+  // useEffect(() => {
+    // //console.log("Token Payload:", tokenPayload);
+    // //console.log("User Role from token:", userRole);
+    // //console.log("Is ADMIN?", userRole === "ADMIN");
+    // //console.log("Is LOAN_OFFICIAL?", userRole === "LOAN_OFFICIAL");
+    // //console.log("Includes check result:", ["ADMIN", "LOAN_OFFICIAL"].includes(userRole));
+  // }, [userRole]);
 
   const columns: Column<LoanApplication>[] = [
     {

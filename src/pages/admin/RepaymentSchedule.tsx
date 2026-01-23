@@ -127,7 +127,7 @@ const RepaymentSchedule = () => {
   };
 
   const handleGenerateRepaymentSchedule = async (loan: LoanApplication) => {
-    console.log("loan", loan);
+    //console.log("loan", loan);
 
     const confirmed = window.confirm(
       "Are you sure you want to generate the repayment schedule?"
@@ -144,7 +144,7 @@ const RepaymentSchedule = () => {
         interestMethod: "REDUCING_BALANCE",
       };
 
-      console.log("params", params);
+      //console.log("params", params);
 
       const queryString = new URLSearchParams(params as any).toString();
 
@@ -152,7 +152,7 @@ const RepaymentSchedule = () => {
 
       const repayment = await axios.post(`${url}`);
 
-      console.log("repayment", repayment.data);
+      //console.log("repayment", repayment.data);
 
       toast({
         title: "Repayment Schedule Generated",

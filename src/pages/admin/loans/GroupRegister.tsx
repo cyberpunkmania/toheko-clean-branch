@@ -115,7 +115,7 @@ const LoanApplicationForm: React.FC = () => {
     },
   });
 
-  console.log("loan", form);
+  //console.log("loan", form);
 
   const {
     control,
@@ -172,7 +172,7 @@ const LoanApplicationForm: React.FC = () => {
   });
 
   const onSubmit = (data: LoanApplicationFormValues) => {
-    console.log("Loan Application Data:", data);
+    //console.log("Loan Application Data:", data);
     mutation.mutate(data);
   };
 

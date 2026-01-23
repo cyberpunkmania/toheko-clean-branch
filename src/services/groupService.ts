@@ -20,7 +20,7 @@ export const groupService = {
 
   updateGroup: async (groupId: number, groupData: GroupRequest): Promise<Group> => {
     try {
-      console.log(`🔄 Attempting to update group ${groupId} using the correct API endpoint`);
+      //console.log(`🔄 Attempting to update group ${groupId} using the correct API endpoint`);
       
       // Using the exact API endpoint from the documentation:
       // PUT /api/v1/groups/update-group/{groupId}
@@ -35,16 +35,16 @@ export const groupService = {
         physicalAddress: groupData.physicalAddress
       };
       
-      console.log('📦 Update payload:', payload);
-      console.log(`🛠 Using documented API endpoint: ${ENDPOINTS.GROUPS.BASE}/update-group/${groupId}`);
+      //console.log('📦 Update payload:', payload);
+      //console.log(`🛠 Using documented API endpoint: ${ENDPOINTS.GROUPS.BASE}/update-group/${groupId}`);
       
       const response = await apiClient.put(
         `${ENDPOINTS.GROUPS.BASE}/update-group/${groupId}`,
         payload
       );
       
-      console.log('✅ Update successful!');
-      console.log('📄 Response data:', response.data);
+      //console.log('✅ Update successful!');
+      //console.log('📄 Response data:', response.data);
       return response.data;
     } 
     catch (error) {
@@ -74,7 +74,7 @@ export const groupService = {
       // So we'll use URL params instead of sending a JSON body
       const params = { reason: suspensionData.reason };
       
-      console.log(`Suspending group ${groupId} with reason parameter:`, params.reason);
+      //console.log(`Suspending group ${groupId} with reason parameter:`, params.reason);
       
       // Send the request with the reason as a request parameter
       const response = await apiClient.patch(
@@ -83,7 +83,7 @@ export const groupService = {
         { params } // The reason goes as a query parameter
       );
       
-      console.log('Suspension response:', response.data);
+      //console.log('Suspension response:', response.data);
     } catch (error) {
       console.error(`Error in suspendGroup for groupId ${groupId}:`, error);
       if (error.response) {

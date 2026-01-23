@@ -111,14 +111,14 @@ const Payments = () => {
         let response;
         
         if (filteredAccount) {
-          console.log(`Fetching payments for account ID: ${filteredAccount}`);
+          //console.log(`Fetching payments for account ID: ${filteredAccount}`);
           response = await paymentService.getPaymentsByAccountId(filteredAccount);
         } else {
-          console.log('Fetching all payments');
+          //console.log('Fetching all payments');
           response = await paymentService.getAllPayments();
         }
         
-        console.log("Payments response:", response);
+        //console.log("Payments response:", response);
         // Extract content array from paginated response or use empty array if undefined
         setPayments(response?.content || []);
       } catch (error) {
@@ -202,9 +202,9 @@ const Payments = () => {
   const onSubmitPayment = async (values: PaymentFormValues) => {
     try {
       setIsSubmitting(true);
-      console.log("Submitting Payment:", values);
+      //console.log("Submitting Payment:", values);
       const response = await paymentService.createPayment(values);
-      console.log('Payment creation response:', response);
+      //console.log('Payment creation response:', response);
       
       toast({ 
         title: "Payment Added",
@@ -236,9 +236,9 @@ const Payments = () => {
   // Handle payment type form submission
   const onSubmitPaymentType = async (values: PaymentTypeFormValues) => {
     try {
-      console.log("Submitting Payment Type:", values);
+      //console.log("Submitting Payment Type:", values);
       const response = await paymentTypeService.createPaymentType(values);
-      console.log('Payment type creation response:', response);
+      //console.log('Payment type creation response:', response);
       
       toast({ 
         title: "Payment Type Added",
@@ -264,7 +264,7 @@ const Payments = () => {
   // Handle payment prompt form submission
   const onSubmitPrompt = async (values: PromptFormValues) => {
     try {
-      console.log("Submitting Payment Prompt:", values);
+      //console.log("Submitting Payment Prompt:", values);
       
       // Convert form values to the expected format for the API
       const promptData: PaymentPromptSchemaType = {
@@ -276,7 +276,7 @@ const Payments = () => {
       };
       
       const response = await paymentService.promptPayment(promptData);
-      console.log('Payment prompt response:', response);
+      //console.log('Payment prompt response:', response);
       
       toast({ 
         title: "Payment Prompt Sent",

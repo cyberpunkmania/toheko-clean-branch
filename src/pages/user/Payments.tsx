@@ -204,7 +204,7 @@ const Payments = () => {
   const checkPaymentStatus = async (externalRef: string): Promise<void> => {
     try {
       setPaymentStatus('checking');
-      console.log(`🔄 Starting payment creation process with external reference: ${externalRef}`);
+      //console.log(`🔄 Starting payment creation process with external reference: ${externalRef}`);
 
       const userId = getUserId();
       if (!userId) {
@@ -232,11 +232,11 @@ const Payments = () => {
       const createPaymentRecord = async () => {
         try {
           attemptCount++;
-          console.log(`📤 Payment creation attempt ${attemptCount}/${maxAttempts} with externalRef: ${externalRef}`);
+          //console.log(`📤 Payment creation attempt ${attemptCount}/${maxAttempts} with externalRef: ${externalRef}`);
 
           // Create payment record using the /api/v1/payments endpoint
           const paymentResponse = await userPaymentService.createPayment(paymentData);
-          console.log(`✅ Payment creation attempt ${attemptCount} response:`, paymentResponse);
+          //console.log(`✅ Payment creation attempt ${attemptCount} response:`, paymentResponse);
 
         } catch (error) {
           console.error(`❌ Error in payment creation attempt ${attemptCount}:`, error);
@@ -244,23 +244,23 @@ const Payments = () => {
       };
 
       // Perform first attempt immediately
-      console.log('🚀 Starting attempt 1 immediately...');
+      //console.log('🚀 Starting attempt 1 immediately...');
       await createPaymentRecord();
 
       // Schedule second attempt after 5 seconds
-      console.log('⏰ Scheduling attempt 2 in 5 seconds...');
+      //console.log('⏰ Scheduling attempt 2 in 5 seconds...');
       const secondAttemptTimeout = setTimeout(async () => {
-        console.log('🚀 Starting attempt 2...');
+        //console.log('🚀 Starting attempt 2...');
         await createPaymentRecord();
 
         // Schedule third attempt after another 5 seconds (total 10 seconds)
-        console.log('⏰ Scheduling attempt 3 in 5 seconds...');
+        //console.log('⏰ Scheduling attempt 3 in 5 seconds...');
         const thirdAttemptTimeout = setTimeout(async () => {
-          console.log('🚀 Starting attempt 3 (final)...');
+          //console.log('🚀 Starting attempt 3 (final)...');
           await createPaymentRecord();
 
           // After all 3 attempts, complete the process and direct user to payment history
-          console.log('✅ All 3 payment creation attempts completed!');
+          //console.log('✅ All 3 payment creation attempts completed!');
           setPaymentStatus('completed');
           toast.success('Payment processing complete! Please check your payment history to view the final status.');
         }, attemptInterval);
@@ -410,7 +410,7 @@ const Payments = () => {
 
         // Initiate the STK push
         const stkResponse = await userPaymentService.initiateSTKPush(stkPushData);
-        console.log('STK push initiated:', stkResponse);
+        //console.log('STK push initiated:', stkResponse);
 
         // Store the STK response
         setStkResponse(stkResponse);

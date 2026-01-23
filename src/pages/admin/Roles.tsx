@@ -57,7 +57,7 @@ const Roles = () => {
 
   // Log roles data for debugging
   useEffect(() => {
-    console.log("Roles data:", roles);
+    //console.log("Roles data:", roles);
   }, [roles]);
 
   // Create mutation

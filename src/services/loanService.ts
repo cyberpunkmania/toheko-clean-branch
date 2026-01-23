@@ -21,20 +21,20 @@ export const loanService = {
   // Loan Types
   getAllLoanTypes: async (): Promise<LoanProduct[]> => {
     const response = await apiClient.get(`${ENDPOINTS.LOAN_PRODUCTS.BASE}/getAll`);
-    console.log({response});
+    //console.log({response});
     
     return response.data.data.content;
   },
 
   getAllLoanNextOfKin: async (): Promise<LoanNextOfKin[]> => {
     const response = await apiClient.get(ENDPOINTS.LOAN_NEXT_OF_KIN.BASE);
-    console.log({response});
+    //console.log({response});
     
     return response.data.content;
   },
   getAllLoanGUarantors: async (): Promise<LoanGuarantor[]> => {
     const response = await apiClient.get(`${ENDPOINTS.LOAN_GUARANTORS.BASE}/getAll`);
-    console.log({response});
+    //console.log({response});
     
     return response.data.content;
   },
@@ -42,7 +42,7 @@ export const loanService = {
   getAllLoanCollaterals: async (): Promise<LoanCollateralItem[]> => {
     try {
       const response = await apiClient.get(`${ENDPOINTS.LOAN_COLLATERALS.BASE}?page=0&size=100&sort=id,desc`);
-      console.log({response});
+      //console.log({response});
       
       // Check if we have the expected data structure
       if (response.data && response.data.data && response.data.data.content) {

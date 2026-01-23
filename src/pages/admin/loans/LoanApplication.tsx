@@ -88,7 +88,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ showForm, set
   const [currentTab, setCurrentTab] = useState("basic");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoadingSection, setIsLoadingSection] = useState(false);
-  console.log("LoanApplicationForm rendered with editLoan:", editLoan);
+  //console.log("LoanApplicationForm rendered with editLoan:", editLoan);
   // Add state for each section's data
   const [loadedSections, setLoadedSections] = useState({
     guarantors: false,
@@ -107,7 +107,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ showForm, set
           case 'guarantors':
             if (!loadedSections.guarantors) {
               const guarantors = await loanService.getLoanGuarantors(editLoan.loanApplicationId);
-              console.log("Fetched guarantors:", guarantors);
+              //console.log("Fetched guarantors:", guarantors);
               form.setValue('guarantors', guarantors);
               setLoadedSections(prev => ({ ...prev, guarantors: true }));
             }
@@ -362,7 +362,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ showForm, set
   //   : undefined;
   const selectedLoanProductId = useWatch({ control, name: "loanProductId" });
   const selectedLoanProduct = loanProducts?.find(lp => lp.id === selectedLoanProductId);
-  console.log("Selected loan product:", selectedLoanProduct);
+  //console.log("Selected loan product:", selectedLoanProduct);
 
 
   useEffect(() => {
@@ -394,42 +394,42 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ showForm, set
             <Form {...form}>
               <form
                 onSubmit={async (e) => {
-                  console.log("Form submit event fired"); // Debug 5
+                  //console.log("Form submit event fired"); // Debug 5
                   e.preventDefault(); // Prevent default browser behavior
 
                   // Get current form state before validation
                   const formData = form.getValues();
-                  console.log("Current form data:", formData);
+                  //console.log("Current form data:", formData);
 
                   // Trigger validation and get the result
                   const isValid = await form.trigger();
-                  console.log("Form validation result:", isValid);
+                  //console.log("Form validation result:", isValid);
 
                   // Get form errors after validation
                   const formErrors = form.formState.errors;
-                  console.log("Form errors:", formErrors);
+                  //console.log("Form errors:", formErrors);
 
                   if (!isValid) {
-                    console.log("❌ FORM IS INVALID - Detailed breakdown:");
+                    //console.log("❌ FORM IS INVALID - Detailed breakdown:");
 
                     // Log invalid fields with their error messages
                     Object.keys(formErrors).forEach((fieldName) => {
                       const error = formErrors[fieldName];
-                      console.log(`🔴 Invalid field: ${fieldName}`);
+                      //console.log(`🔴 Invalid field: ${fieldName}`);
 
                       if (error?.message) {
-                        console.log(`   Error message: ${error.message}`);
+                        //console.log(`   Error message: ${error.message}`);
                       }
 
                       if (error?.type) {
-                        console.log(`   Error type: ${error.type}`);
+                        //console.log(`   Error type: ${error.type}`);
                       }
 
                       // For nested fields (arrays), log specific array item errors
                       if (Array.isArray(error)) {
                         error.forEach((item, index) => {
                           if (item) {
-                            console.log(`   Array item ${index} errors:`, item);
+                            //console.log(`   Array item ${index} errors:`, item);
                           }
                         });
                       }
@@ -437,13 +437,13 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ showForm, set
                       // For object errors, log nested field errors
                       if (typeof error === 'object' && error !== null && !Array.isArray(error) && !error.message) {
                         Object.keys(error).forEach((nestedField) => {
-                          console.log(`   Nested field ${nestedField}:`, error[nestedField]);
+                          //console.log(`   Nested field ${nestedField}:`, error[nestedField]);
                         });
                       }
                     });
 
                     // Also log which required fields are missing values
-                    console.log("📋 CHECKING REQUIRED FIELDS:");
+                    //console.log("📋 CHECKING REQUIRED FIELDS:");
                     const requiredFields = [
                       'loanProductId',
                       'applicantIdNo',
@@ -457,7 +457,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ showForm, set
                       const value = formData[field];
                       const hasError = formErrors[field];
 
-                      console.log(`${hasError ? '❌' : '✅'} ${field}: ${value} ${hasError ? `(Error: ${formErrors[field]?.message})` : ''}`);
+                      //console.log(`${hasError ? '❌' : '✅'} ${field}: ${value} ${hasError ? `(Error: ${formErrors[field]?.message})` : ''}`);
                     });
 
                     // Check array fields
@@ -465,16 +465,16 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ showForm, set
                       const arrayValue = formData[arrayField];
                       const arrayError = formErrors[arrayField];
 
-                      console.log(`📚 ${arrayField}: ${Array.isArray(arrayValue) ? arrayValue.length : 0} items`);
+                      //console.log(`📚 ${arrayField}: ${Array.isArray(arrayValue) ? arrayValue.length : 0} items`);
 
                       if (arrayError) {
-                        console.log(`   ${arrayField} errors:`, arrayError);
+                        //console.log(`   ${arrayField} errors:`, arrayError);
                       }
 
                       // Log individual array item validation
                       if (Array.isArray(arrayValue)) {
                         arrayValue.forEach((item, index) => {
-                          console.log(`   Item ${index}:`, item);
+                          //console.log(`   Item ${index}:`, item);
                         });
                       }
                     });
@@ -482,7 +482,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ showForm, set
                     return; // Don't proceed with submission
                   }
 
-                  console.log("✅ Form is valid - proceeding with submission");
+                  //console.log("✅ Form is valid - proceeding with submission");
                   await onSubmit(formData);
                 }}
                 className="space-y-6">
