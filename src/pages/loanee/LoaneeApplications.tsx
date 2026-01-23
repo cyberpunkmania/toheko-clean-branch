@@ -136,7 +136,7 @@ const LoaneeApplications = () => {
         );
         setKpis(kpisResponse.data);
       } catch (kpiError) {
-        console.log('KPIs endpoint not available, calculating from applications');
+        //console.log('KPIs endpoint not available, calculating from applications');
         setKpis({
           pending: allApplications.filter(a => a.status?.toUpperCase() === 'PENDING').length,
           underReview: allApplications.filter(a => a.status?.toUpperCase() === 'UNDER_REVIEW').length,

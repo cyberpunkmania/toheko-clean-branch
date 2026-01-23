@@ -6,7 +6,7 @@ export const userService = {
   getAllUsers: async (): Promise<User[]> => {
     try {
       const response = await apiClient.get(ENDPOINTS.USERS.BASE);
-      console.log('Users API response:', response.data);
+      //console.log('Users API response:', response.data);
       return response.data?.content || []; // Assuming paginated response with content array
     } catch (error) {
       console.error('Error fetching users:', error);

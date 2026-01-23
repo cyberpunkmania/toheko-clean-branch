@@ -129,7 +129,7 @@ const Disbursements = () => {
     queryFn: disbursementService.getAllDisbursements,
   });
 const disbursements = disbursementsData?.content || [];
-  console.log('Disbursements data:', disbursements);
+  //console.log('Disbursements data:', disbursements);
 
   const { data: loanApplications = [], isLoading: isLoanApplicationsLoading } = useQuery({
     queryKey: ["loan-applications"],

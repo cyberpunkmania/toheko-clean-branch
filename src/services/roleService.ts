@@ -6,7 +6,7 @@ export const roleService = {
   getAllRoles: async (): Promise<Role[]> => {
     try {
       const response = await apiClient.get(ENDPOINTS.ROLES.BASE);
-      console.log('Roles API response:', response.data);
+      //console.log('Roles API response:', response.data);
       return response.data || [];
     } catch (error) {
       console.error('Error fetching roles:', error);

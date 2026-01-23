@@ -39,9 +39,9 @@ const RequestOTP = () => {
 
     setIsSending(true);
     try {
-      console.log("Sending OTP to:", email);
+      //console.log("Sending OTP to:", email);
       const response = await otpService.sendOTP({ email });
-      console.log("OTP Send Response:", response);
+      //console.log("OTP Send Response:", response);
       
       toast.success("OTP sent successfully! Please check your email.");
       setIsOtpSent(true);
@@ -114,15 +114,15 @@ const RequestOTP = () => {
 
     setIsVerifying(true);
     try {
-      console.log("Verifying OTP for email:", email);
-      console.log("OTP Code:", otpCode);
+      //console.log("Verifying OTP for email:", email);
+      //console.log("OTP Code:", otpCode);
       
       const response = await otpService.verifyOTP({
         email,
         otp: otpCode,
       });
       
-      console.log("OTP Verify Response:", response);
+      //console.log("OTP Verify Response:", response);
       
       toast.success("OTP verified successfully!");
       

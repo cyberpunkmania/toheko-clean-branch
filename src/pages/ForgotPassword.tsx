@@ -91,7 +91,7 @@ const ForgotPassword = () => {
     setIsLoading(true);
     try {
       const response = await forgotPasswordService.verifyEmail(formData.email);
-      console.log("API Response:", response); // Log the response for debugging
+      //console.log("API Response:", response); // Log the response for debugging
       if (response.status === 200) {
         toast.success("OTP sent to your email!");
         setStep(2);
@@ -112,7 +112,7 @@ const ForgotPassword = () => {
     setIsLoading(true);
     try {
       const response = await forgotPasswordService.verifyOtp(formData.email, parseInt(formData.otp));
-      console.log("API Response:", response); // Log the response for debugging
+      //console.log("API Response:", response); // Log the response for debugging
       if (response.status === 200) {
         toast.success("OTP verified!");
         setStep(3);
@@ -133,7 +133,7 @@ const ForgotPassword = () => {
     setIsLoading(true);
     try {
       const response = await forgotPasswordService.changePassword(formData.email, formData.password);
-      console.log("API Response:", response); // Log the response for debugging
+      //console.log("API Response:", response); // Log the response for debugging
       if (response.status === 200) {
         toast.success("Password changed successfully!");
         navigate("/login");

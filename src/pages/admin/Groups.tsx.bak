@@ -883,7 +883,7 @@ const Groups: React.FC = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                {console.log('Groups data being passed to DataTable:', groups?.content)}
+                {//console.log('Groups data being passed to DataTable:', groups?.content)}
                 <DataTable
                   columns={groupColumns}
                   data={groups?.content || []}

@@ -42,5 +42,3 @@ export const boardMemberService = {
     return response.data;
   }
 };
-
-
